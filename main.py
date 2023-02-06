@@ -83,3 +83,5 @@ test_mvn = mv_normal_density( sim, mu, cov)
 # sanity check 
 true_mvn = multivariate_normal.pdf(sim, mean=mu, cov=cov)
 print( np.sum( np.abs( test_mvn - true_mvn ) ) )
+
+# Question 3
