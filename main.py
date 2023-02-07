@@ -5,6 +5,8 @@
 import numpy as np 
 import pandas as pd
 from scipy.stats import multivariate_normal
+from sklearn.mixture import GaussianMixture
+import matplotlib.pyplot as plt
 
 # Problem 2
 # Question 1
@@ -87,6 +89,15 @@ print( np.sum( np.abs( test_mvn - true_mvn ) ) )
 # Question 3
 df = pd.read_pickle( 'Data4PhDs.pkl' )
 df.head()
+
+plt.figure(1)
+plt.scatter( df.iloc[ :, 0 ], df.iloc[ :, 1 ] )
+plt.xlabel( df.columns[ 0 ])
+plt.ylabel( df.columns[ 1 ])
+plt.title( 'Bank dataset' )
+plt.savefig( 'results/bankunclassified.png')
+plt.show()
+
 T, K = df.shape
 
 X = df.values
@@ -156,6 +167,19 @@ print( 'Mean parameters 2nd Gaussian : {}'.format( mu2 ) )
 print( 'Covariance parameters 1st Gaussian : {}'.format( sigma1 ) )
 print( 'Covariance parameters 2nd Gaussian : {}'.format( sigma2 ) )
 
+bankType = f1 >= f2
 
-from sklearn.mixture import GaussianMixture
+position = 0
+for bank in X:
+    if bankType[ position ]:
+        plt.plot( bank[ 0 ], bank[ 1 ], 'xr' )
+    else:
+        plt.plot( bank[ 0 ], bank[ 1 ], 'xg' )
+    position += 1
+plt.xlabel( df.columns[ 0 ])
+plt.ylabel( df.columns[ 1 ])
+plt.title( 'Banks classified by Gaussian Mixture Model' )
+plt.savefig( 'results/bankclassified.png')
+plt.show()
+
 gm = GaussianMixture(n_components=2, init_params='random' ).fit(X)
