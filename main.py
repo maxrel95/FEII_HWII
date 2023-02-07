@@ -75,8 +75,8 @@ def mv_normal_density( x, mu, sigma ):
     third = np.exp( -0.5*( 1/( 1 - rho**2 ) )*( first**2 - 2*rho*first*second + second**2 ) )
     cst = 1 / ( 2 * np.pi * sigmaY * sigmaZ * np.sqrt( 1 - rho**2 ))
 
-    density = cst * third
-    return density.reshape( [ -1, 1 ] )
+    density = ( cst * third ).reshape( [ -1, 1 ] )
+    return density
 
 test_mvn = mv_normal_density( sim, mu, cov)
 
@@ -85,3 +85,77 @@ true_mvn = multivariate_normal.pdf(sim, mean=mu, cov=cov)
 print( np.sum( np.abs( test_mvn - true_mvn ) ) )
 
 # Question 3
+df = pd.read_pickle( 'Data4PhDs.pkl' )
+df.head()
+T, K = df.shape
+
+X = df.values
+mu = X.mean( 0 ).reshape( [ -1, 1 ] )
+sigma = np.cov( X.T )
+
+mu1 = mu - 2 * np.random.uniform( size=[ 2, 1 ] )
+mu2 = mu + 2 * np.random.uniform( size=[ 2, 1 ] )
+sigma1 = sigma.copy()
+sigma1[ 0, 0 ] = sigma1[ 0, 0 ] + 2
+sigma2 = sigma.copy()
+sigma2[ 1, 1 ] = sigma2[ 1, 1 ] + 2
+smallPi1 = 0.7
+smallPi2 = 1 - smallPi1
+
+theta_old = np.vstack( ( 
+    mu1.reshape( [ -1, 1 ] ), vech_loop( sigma1 ),
+    mu2.reshape( [ -1, 1 ] ), vech_loop( sigma2 ),
+    smallPi1
+))
+
+position = 0
+e_tol = .0001
+max_iter = 1000
+dist = 1
+
+while ( dist > e_tol ) & ( position < max_iter ):
+    f1 = mv_normal_density( X, mu1, sigma1 )
+    f2 = mv_normal_density( X, mu2, sigma2 )
+    density = smallPi1*f1 + smallPi2*f2
+
+    log_like = np.log( density ).sum()
+
+    # update proba
+    proba_state1 = ( f1*smallPi1 ) / density
+    proba_state2 = ( f2*smallPi2 ) / density
+
+    # update mu
+    mu1 = ( X*proba_state1 ).sum( 0 )  / proba_state1.sum()
+    mu2 = ( X*proba_state2 ).sum( 0 )  / proba_state2.sum()
+
+    # update sigma 
+    partial1 = ( X - mu1 ) * np.sqrt( proba_state1 )
+    partial2 = ( X - mu2 ) * np.sqrt( proba_state2 )
+
+    sigma1 = ( partial1.T @ partial1 ) / proba_state1.sum( 0 )
+    sigma2 = ( partial2.T @ partial2 ) / proba_state2.sum( 0 )
+
+    smallPi1 = proba_state1.mean()
+    smallPi2 = 1 - smallPi1
+
+    theta_new = np.vstack( ( 
+        mu1.reshape( [ -1, 1 ] ), vech_loop( sigma1 ),
+        mu2.reshape( [ -1, 1 ] ), vech_loop( sigma2 ),
+        smallPi1
+    ))
+
+    dist = ( ( theta_old - theta_new )**2 ).sum()
+    theta_old = theta_new
+    position += 1
+    print( position )
+
+# print results 
+print( 'mixeur of gaussian Pi : {}'.format( smallPi1 ) )
+print( 'Mean parameters 1st Gaussian : {}'.format( mu1 ) )
+print( 'Mean parameters 2nd Gaussian : {}'.format( mu2 ) )
+print( 'Covariance parameters 1st Gaussian : {}'.format( sigma1 ) )
+print( 'Covariance parameters 2nd Gaussian : {}'.format( sigma2 ) )
+
+
+from sklearn.mixture import GaussianMixture
+gm = GaussianMixture(n_components=2, init_params='random' ).fit(X)
