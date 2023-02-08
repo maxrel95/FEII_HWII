@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 import statsmodels.api as sm
 
+
 # Question 1 
 b = np.array( [ .003, .022 ] ).T
 A = np.array( [[ .073, .620],
@@ -103,13 +104,12 @@ while ( ( is_tol < 1 ) & ( iter < max_iter ) ):
     H = Hn
 
 rH = H.reshape( [ Nv[ 0 ], Nv[ 0 ] ] ).T
-x, y = np.meshgrid(np.arange( 10 ), np.arange( 10 ))
+x, y = np.meshgrid( np.arange( 10 ), np.arange( 10 ) )
 
 plt.figure( 1 )
 ax = plt.axes( projection='3d' )
-ax.plot_surface( x , y, rH.T,
- cmap='plasma', alpha=0.8 )
-ax.view_init(20, -40) 
+ax.plot_surface( x , y, rH.T, cmap='plasma', alpha=0.8 )
+ax.view_init( 20, -40 ) 
 plt.title('price/dividend as a function of cons and div gr')
 ax.set_xlabel( 'cons g' )
 ax.set_ylabel( 'div g' )
