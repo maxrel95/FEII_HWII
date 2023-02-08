@@ -23,7 +23,7 @@ def vech( A ):
     N = A.shape[ 0 ]
     K = A.shape[ 1 ]
     if N != K:
-        raise NameError( " this function works only for squared matrix")
+        raise NameError( "this function works only for squared matrix" )
     else : 
         ab = np.tril( A ).reshape([ N*K, 1 ], order='f' )
         return ab[ ab != 0 ].reshape( [ -1, 1 ] )
@@ -32,7 +32,7 @@ def vech_loop( A ):
     N = A.shape[ 0 ]
     K = A.shape[ 1 ]
     if N != K:
-        raise NameError( " this function works only for squared matrix")
+        raise NameError( "this function works only for squared matrix" )
     else : 
         to_remove = 0
         to_store = np.array( [] )
