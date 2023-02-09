@@ -16,6 +16,7 @@ df[ 'r_lag1' ] = df[ 'Rt' ].shift( 1 )
 df[ 'r_lag2' ] = df[ 'Rt' ].shift( 2 )
 df[ 'ct' ] = df[ 'Consumption' ] / df[ 'Consumption' ].shift( 1 )
 df[ 'ct_lag1' ] = df[ 'ct' ].shift( 1 )
+df[ 'ct_lag2' ] = df[ 'ct' ].shift( 2 )
 df[ 'const' ] = 1
 df[ 'Rft'] = ( 1 + df[ 'LTIR' ] / 100 )**( 1 / 12 )
 df[ 'rf_lag1' ] = df[ 'Rft' ].shift( 1 )
@@ -45,7 +46,7 @@ endog1 = np.zeros( exog.shape[ 0 ] )
 mod1 = gmm.NonlinearIVGMM( endog1, exog, instrument_augmented, moment_condition )
 
 w0inv = instrument.T @ instrument / len( endog1 )
-param, weights = mod1.fititer( [ 1, -1 ] )#, inv_weights=w0inv ) 
-res1 = mod1.fit( [ 1, -1 ], maxiter=100 ) #inv_weights=w0invm , ) 
+param, weights = mod1.fititer( [ 1, -1 ] )
+res1 = mod1.fit( [ 1, -1 ], maxiter=100 ) 
 print( res1.summary( yname='Euler Eq', xname=[ 'discount', 'CRRA' ] ) )
 
