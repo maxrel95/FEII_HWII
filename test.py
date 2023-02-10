@@ -10,6 +10,12 @@ from statsmodels.sandbox.regression.gmm import GMM
 
 data = pd.read_csv('http://web.pdx.edu/~crkl/ceR/data/gmmq.txt',sep='\s+',
                   names = ['V1', 'V2', 'V3'])
+data = pd.read_csv( "GMMData.csv", index_col=0, parse_dates=True )
+data[ 'SP500D' ] = ( data[ 'SP500' ] + data[ 'Dividend' ] ) / ( data[ 'SP500' ] + data[ 'Dividend' ] ).shift(1)
+data[ 'ct+1' ] = data[ 'Consumption' ]/data[ 'Consumption' ].shift(1)
+data[ 'rf' ] = data[ 'LTIR' ]/1200 + 1
+data = data[ [ 'ct+1', 'SP500D', 'rf'] ]
+data.dropna( axis=0, inplace=True )
 # data columns: (V1) c(t+1)/c(t) (V2)vwr (V3)rfr
 zvar = sm.add_constant(data[1:])  # instrument
 xvar = data[:-1] # exog variables
