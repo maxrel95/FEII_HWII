@@ -165,6 +165,7 @@ print( f'Covariance parameters 2nd Gaussian : { sigma2 }' )
 gm = GaussianMixture( n_components=2, init_params='random' ).fit( X )
 
 bankType = f1 >= f2
+
 fig, ax = plt.subplots()
 position = 0
 for bank in X:
@@ -175,6 +176,7 @@ for bank in X:
     position += 1
 plt.xlabel( df.columns[ 0 ] )
 plt.ylabel( df.columns[ 1 ] )
+plt.grid()
 ax.legend( [ a1, a2 ], [ "Type 1", "Type 2" ] )
 plt.title( 'Banks classified by Gaussian Mixture Model' )
 plt.savefig( 'results/bankclassified.png' )
