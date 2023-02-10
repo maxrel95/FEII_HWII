@@ -73,23 +73,23 @@ def mv_normal_density( x, mu, sigma ):
     density = ( cst * third ).reshape( [ -1, 1 ] )
     return density
 
-test_mvn = mv_normal_density( sim, mu, cov)
+test_mvn = mv_normal_density( sim, mu, cov )
 
 # sanity check 
-true_mvn = multivariate_normal.pdf(sim, mean=mu, cov=cov)
-xd = np.hstack( (test_mvn.reshape(-1,1), true_mvn.reshape(-1,1)))
+true_mvn = multivariate_normal.pdf( sim, mean=mu, cov=cov )
+xd = np.hstack( ( test_mvn.reshape( -1, 1 ), true_mvn.reshape( -1, 1 ) ) )
 np.sum( np.abs( test_mvn - true_mvn.reshape( -1, 1 ) ) )
 
 # Question 3
 df = pd.read_pickle( 'Data4PhDs.pkl' )
 df.head()
 
-plt.figure(1)
+plt.figure( 1 )
 plt.scatter( df.iloc[ :, 0 ], df.iloc[ :, 1 ] )
-plt.xlabel( df.columns[ 0 ])
-plt.ylabel( df.columns[ 1 ])
+plt.xlabel( df.columns[ 0 ] )
+plt.ylabel( df.columns[ 1 ] )
 plt.title( 'Bank dataset' )
-plt.savefig( 'results/bankunclassified.png')
+plt.savefig( 'results/bankunclassified.png' )
 plt.show()
 
 T, K = df.shape
