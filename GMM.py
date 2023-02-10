@@ -61,8 +61,8 @@ b0 = [ 1, -1 ]
 res1 = model1.fit( b0, maxiter=100, optim_method='bfgs' )
 print( res1.summary( xname=[ 'beta', 'gamma' ] ) )
 
-with open('results/gmmres1.tex','w') as file:
-    file.write( res1.summary( xname=[ 'beta', 'gamma' ] ).as_latex() )
+with open( 'results/gmmres1.tex','w' ) as file:
+    file.write( res1.summary( xname=[ 'beta', 'gamma' ] ).tables[ 1 ].as_latex_tabular() )
 
 #### real term 
 real_zvar = df[ [ 'const', 'real_ct_lag1', 'real_r_lag1', 'real_rf_lag1' ] ]  # instrument
@@ -75,7 +75,6 @@ model2 = GMMREM( yvar, real_xvar, real_zvar, k_moms=8, k_params=2 )
 b0 = [ 1, -1 ]
 res2 = model2.fit( b0, maxiter=100, optim_method='bfgs' )
 print( res2.summary( xname=[ 'beta', 'gamma' ] ) )
-#res2.summary( xname=[ 'beta', 'gamma' ] ) #.as_latex()
 
-with open('results/gmmres2.tex','w') as file:
-    file.write( res2.summary( xname=[ 'beta', 'gamma' ] ).as_latex() )
+with open( 'results/gmmres2.tex','w' ) as file:
+    file.write( res2.summary( xname=[ 'beta', 'gamma' ] ).tables[ 1 ].as_latex_tabular() )
