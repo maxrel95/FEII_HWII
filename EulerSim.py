@@ -1,4 +1,4 @@
-# Author : Maxime Borel 
+# Maxime Borel 
 # Financial Econometrics II 
 # Homework II 
 

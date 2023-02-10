@@ -1,3 +1,7 @@
+# Maxime Borel 
+# Financial Econometrics II 
+# Homework II 
+
 import numpy as np 
 import pandas as pd
 from statsmodels.sandbox.regression.gmm import GMM

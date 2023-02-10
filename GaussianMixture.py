@@ -1,4 +1,4 @@
-# Author : Maxime Borel 
+# Maxime Borel 
 # Financial Econometrics II 
 # Homework II 
 
@@ -7,6 +7,7 @@ import pandas as pd
 from scipy.stats import multivariate_normal
 from sklearn.mixture import GaussianMixture
 import matplotlib.pyplot as plt
+
 
 # Problem 2
 # Question 1
