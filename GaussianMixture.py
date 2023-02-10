@@ -161,12 +161,7 @@ print( 'Mean parameters 2nd Gaussian : {}'.format( mu2 ) )
 print( 'Covariance parameters 1st Gaussian : {}'.format( sigma1 ) )
 print( 'Covariance parameters 2nd Gaussian : {}'.format( sigma2 ) )
 
-
-
-
 gm = GaussianMixture( n_components=2, init_params='random' ).fit( X )
-
-
 
 bankType = f1 >= f2
 
