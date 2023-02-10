@@ -55,7 +55,6 @@ mu = sim.mean( 0 )
 cov = np.cov( sim.T )
 
 def mv_normal_density( x, mu, sigma ):
-    # need determinant and inverse of sigma 
     if mu.shape.__len__() == 1:
         mu = mu.reshape( [ -1, 1 ] )
 
@@ -153,28 +152,30 @@ while ( dist > e_tol ) & ( position < max_iter ):
     dist = ( ( theta_old - theta_new )**2 ).sum()
     theta_old = theta_new
     position += 1
-    print( position )
+
+print( position )
 
 # print results 
-print( 'mixeur of gaussian Pi : {}'.format( smallPi1 ) )
-print( 'Mean parameters 1st Gaussian : {}'.format( mu1 ) )
-print( 'Mean parameters 2nd Gaussian : {}'.format( mu2 ) )
-print( 'Covariance parameters 1st Gaussian : {}'.format( sigma1 ) )
-print( 'Covariance parameters 2nd Gaussian : {}'.format( sigma2 ) )
+print( f'mixeur of gaussian Pi : { smallPi1 }' )
+print( f'Mean parameters 1st Gaussian : {mu1}' )
+print( f'Mean parameters 2nd Gaussian : { mu2 }' )
+print( f'Covariance parameters 1st Gaussian : { sigma1 }' )
+print( f'Covariance parameters 2nd Gaussian : { sigma2 }' )
 
 gm = GaussianMixture( n_components=2, init_params='random' ).fit( X )
 
 bankType = f1 >= f2
-
+fig, ax = plt.subplots()
 position = 0
 for bank in X:
     if bankType[ position ]:
-        plt.plot( bank[ 0 ], bank[ 1 ], 'xr' )
+        a1, = ax.plot( bank[ 0 ], bank[ 1 ], 'oc' )
     else:
-        plt.plot( bank[ 0 ], bank[ 1 ], 'xg' )
+        a2, = ax.plot( bank[ 0 ], bank[ 1 ], '+b' )
     position += 1
 plt.xlabel( df.columns[ 0 ] )
 plt.ylabel( df.columns[ 1 ] )
+ax.legend( [ a1, a2 ], [ "Type 1", "Type 2" ] )
 plt.title( 'Banks classified by Gaussian Mixture Model' )
 plt.savefig( 'results/bankclassified.png' )
 plt.show()
