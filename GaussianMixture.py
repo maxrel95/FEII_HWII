@@ -49,7 +49,7 @@ test_vech = vech_loop( A )
 print( test_vech )
 
 # Question 2
-sim = np.random.uniform( 0, 1, (100, 2))
+sim = np.random.uniform( 0, 1, ( 100, 2 ) )
 mu = sim.mean( 0 )
 cov = np.cov( sim.T )
 
@@ -58,23 +58,15 @@ def mv_normal_density( x, mu, sigma ):
     if mu.shape.__len__() == 1:
         mu = mu.reshape( [ -1, 1 ] )
 
-    N = x.shape[ 1 ]
-    det_sigma = sigma[ 0, 0 ]*sigma[ 1, 1 ] - sigma[ 1, 0 ]*sigma[ 0, 1 ]
-    inv_sigma = np.array( [
-        [ sigma[ 1, 1 ], -sigma[ 0, 1 ]],
-        [ -sigma[ 1, 0 ], sigma[ 0, 0 ] ]
-    ] )
-    inv_sigma = inv_sigma / det_sigma
-
     y = x[ :, 0 ]
     z = x[ :, 1 ]
     sigmaY = np.sqrt( sigma[ 0, 0 ] )
     sigmaZ = np.sqrt( sigma[ 1, 1 ] )
-    rho = sigma[ 1, 0 ] / ( sigmaZ * sigmaY)
+    rho = sigma[ 1, 0 ] / ( sigmaZ * sigmaY )
 
     first = ( y - mu[ 0 ] ) / sigmaY
     second = ( z - mu[ 1 ] ) / sigmaZ
-    third = np.exp( -0.5*( 1/( 1 - rho**2 ) )*( first**2 - 2*rho*first*second + second**2 ) )
+    third = np.exp( -( 1/(2*( 1 - rho**2 ) ) ) *( first**2 - 2*rho*first*second + second**2 ) )
     cst = 1 / ( 2 * np.pi * sigmaY * sigmaZ * np.sqrt( 1 - rho**2 ))
 
     density = ( cst * third ).reshape( [ -1, 1 ] )
@@ -84,7 +76,8 @@ test_mvn = mv_normal_density( sim, mu, cov)
 
 # sanity check 
 true_mvn = multivariate_normal.pdf(sim, mean=mu, cov=cov)
-print( np.sum( np.abs( test_mvn - true_mvn ) ) )
+xd = np.hstack( (test_mvn.reshape(-1,1), true_mvn.reshape(-1,1)))
+np.sum( np.abs( test_mvn - true_mvn.reshape( -1, 1 ) ) )
 
 # Question 3
 df = pd.read_pickle( 'Data4PhDs.pkl' )
@@ -104,20 +97,21 @@ X = df.values
 mu = X.mean( 0 ).reshape( [ -1, 1 ] )
 sigma = np.cov( X.T )
 
-mu1 = mu - 2 * np.random.uniform( size=[ 2, 1 ] )
-mu2 = mu + 2 * np.random.uniform( size=[ 2, 1 ] )
+mu1 = mu + 2 * np.random.uniform( size=[ 2, 1 ] )
+mu2 = mu - 2 * np.random.uniform( size=[ 2, 1 ] )
 sigma1 = sigma.copy()
-sigma1[ 0, 0 ] = sigma1[ 0, 0 ] + 2
+sigma1[ 0, 0 ] = sigma1[ 0, 0 ] + np.random.uniform( size=[ 1, 1 ] )
 sigma2 = sigma.copy()
-sigma2[ 1, 1 ] = sigma2[ 1, 1 ] + 2
-smallPi1 = 0.7
+sigma2[ 1, 1 ] = sigma2[ 1, 1 ] + np.random.uniform( size=[ 1, 1 ] )
+smallPi1 = 0.4
 smallPi2 = 1 - smallPi1
 
 theta_old = np.vstack( ( 
     mu1.reshape( [ -1, 1 ] ), vech_loop( sigma1 ),
     mu2.reshape( [ -1, 1 ] ), vech_loop( sigma2 ),
-    smallPi1
-))
+    smallPi1 
+    )
+)
 
 position = 0
 e_tol = .0001
@@ -167,6 +161,13 @@ print( 'Mean parameters 2nd Gaussian : {}'.format( mu2 ) )
 print( 'Covariance parameters 1st Gaussian : {}'.format( sigma1 ) )
 print( 'Covariance parameters 2nd Gaussian : {}'.format( sigma2 ) )
 
+
+
+
+gm = GaussianMixture( n_components=2, init_params='random' ).fit( X )
+
+
+
 bankType = f1 >= f2
 
 position = 0
@@ -182,4 +183,3 @@ plt.title( 'Banks classified by Gaussian Mixture Model' )
 plt.savefig( 'results/bankclassified.png' )
 plt.show()
 
-gm = GaussianMixture( n_components=2, init_params='random' ).fit(X)
