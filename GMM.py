@@ -12,9 +12,9 @@ df[ 'inflationRate' ] = df[ 'CPI' ].pct_change()
 # Stock market returns
 df[ 'sp500+div' ] = df[ 'SP500' ] + df[ 'Dividend' ]
 df[ 'Rt' ] = df[ 'sp500+div' ] / df[ 'sp500+div' ].shift( 1 )
-df[ 'realRt' ] = df[ 'Rt' ] / ( 1 + df[ 'inflationRate' ] )
+df[ 'real_Rt' ] = df[ 'Rt' ] / ( 1 + df[ 'inflationRate' ] )
 df[ 'r_lag1' ] = df[ 'Rt' ].shift( 1 )
-df[ 'real_r_lag1' ] = df[ 'realRt' ].shift( 1 )
+df[ 'real_r_lag1' ] = df[ 'real_Rt' ].shift( 1 )
 
 # Consumption
 df[ 'ct' ] = df[ 'Consumption' ] / df[ 'Consumption' ].shift( 1 )
@@ -52,7 +52,7 @@ class GMMREM( GMM ):
         return np.column_stack(( m1, m2 ))
 
 # 2 Euler functions with 4 instruments in each equation 
-model1 = GMMREM(yvar, xvar, zvar, k_moms=8, k_params=2)
+model1 = GMMREM( yvar, xvar, zvar, k_moms=8, k_params=2 )
 b0 = [ 1, -1 ]
 res1 = model1.fit( b0, maxiter=100, optim_method='bfgs' )
 print(res1.summary( xname=[ 'beta', 'gamma' ] ) )
@@ -64,7 +64,7 @@ real_xvar = df[ ['real_ct', 'real_Rt', 'real_Rft' ] ] # exog variables
 real_xvar = np.array( real_xvar )
 real_zvar = np.array( real_zvar )
 
-model2 = GMMREM(yvar, real_xvar, real_zvar, k_moms=8, k_params=2)
+model2 = GMMREM( yvar, real_xvar, real_zvar, k_moms=8, k_params=2 )
 b0 = [ 1, -1 ]
-res12 = model2.fit( b0, maxiter=100, optim_method='bfgs' )
-print( res1.summary( xname=[ 'beta', 'gamma' ] ) )
+res2 = model2.fit( b0, maxiter=100, optim_method='bfgs' )
+print( res2.summary( xname=[ 'beta', 'gamma' ] ) )
