@@ -61,7 +61,7 @@ b0 = [ 1, -1 ]
 res1 = model1.fit( b0, maxiter=100, optim_method='bfgs' )
 print( res1.summary( xname=[ 'beta', 'gamma' ] ) )
 
-with open( 'results/gmmres1.tex','w' ) as file:
+with open( 'results/gmmres1.tex', 'w' ) as file:
     file.write( res1.summary( xname=[ 'beta', 'gamma' ] ).tables[ 1 ].as_latex_tabular() )
 
 #### real term 
@@ -76,5 +76,5 @@ b0 = [ 1, -1 ]
 res2 = model2.fit( b0, maxiter=100, optim_method='bfgs' )
 print( res2.summary( xname=[ 'beta', 'gamma' ] ) )
 
-with open( 'results/gmmres2.tex','w' ) as file:
+with open( 'results/gmmres2.tex', 'w' ) as file:
     file.write( res2.summary( xname=[ 'beta', 'gamma' ] ).tables[ 1 ].as_latex_tabular() )
