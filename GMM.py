@@ -52,8 +52,10 @@ param, weights = mod1.fititer( [ 1, -1 ] )
 res1 = mod1.fit( [ 1, -1 ], maxiter=100 ) 
 print( res1.summary( yname='Euler Eq', xname=[ 'discount', 'CRRA' ] ) )
 
-
-(df[ 'Rt' ]-1).expanding().mean()
-((df[ 'Rt' ]-1)**2).expanding().mean()
-((df[ 'Rt' ]-1)**3).expanding().mean()
-((df[ 'Rt' ]-1)**4).expanding().mean()
+import matplotlib.pyplot as plt
+plt.figure()
+#(df[ 'Rt' ]-1).expanding().mean().plot()
+#((df[ 'Rt' ]-1)**2).expanding().mean().plot()
+#((df[ 'Rt' ]-1)**3).expanding().mean().plot()
+((df[ 'Rt' ]-1)**4).expanding().mean().plot()
+plt.legend(['1','2', '3', '4'])
