@@ -35,7 +35,7 @@ df[ 'real_rf_lag1' ] = df[ 'real_Rft' ].shift( 1 )
 df.dropna( axis=0, inplace=True )
 
 zvar = df[ [ 'const', 'ct_lag1', 'r_lag1', 'rf_lag1' ] ]  # instrument
-xvar = df[ ['ct', 'Rt', 'Rft' ] ] # exog variables
+xvar = df[ [ 'ct', 'Rt', 'Rft' ] ] # exog variables
 
 yvar = np.zeros( xvar.shape[ 0 ] ) # endog variable,not used
 xvar = np.array( xvar )
@@ -59,11 +59,14 @@ class GMMREM( GMM ):
 model1 = GMMREM( yvar, xvar, zvar, k_moms=8, k_params=2 )
 b0 = [ 1, -1 ]
 res1 = model1.fit( b0, maxiter=100, optim_method='bfgs' )
-print(res1.summary( xname=[ 'beta', 'gamma' ] ) )
+print( res1.summary( xname=[ 'beta', 'gamma' ] ) )
+
+with open('results/gmmres1.tex','w') as file:
+    file.write( res1.summary( xname=[ 'beta', 'gamma' ] ).as_latex() )
 
 #### real term 
 real_zvar = df[ [ 'const', 'real_ct_lag1', 'real_r_lag1', 'real_rf_lag1' ] ]  # instrument
-real_xvar = df[ ['real_ct', 'real_Rt', 'real_Rft' ] ] # exog variables
+real_xvar = df[ [ 'real_ct', 'real_Rt', 'real_Rft' ] ] # exog variables
 
 real_xvar = np.array( real_xvar )
 real_zvar = np.array( real_zvar )
@@ -72,3 +75,7 @@ model2 = GMMREM( yvar, real_xvar, real_zvar, k_moms=8, k_params=2 )
 b0 = [ 1, -1 ]
 res2 = model2.fit( b0, maxiter=100, optim_method='bfgs' )
 print( res2.summary( xname=[ 'beta', 'gamma' ] ) )
+#res2.summary( xname=[ 'beta', 'gamma' ] ) #.as_latex()
+
+with open('results/gmmres2.tex','w') as file:
+    file.write( res2.summary( xname=[ 'beta', 'gamma' ] ).as_latex() )
