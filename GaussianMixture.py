@@ -176,10 +176,10 @@ for bank in X:
     else:
         plt.plot( bank[ 0 ], bank[ 1 ], 'xg' )
     position += 1
-plt.xlabel( df.columns[ 0 ])
-plt.ylabel( df.columns[ 1 ])
+plt.xlabel( df.columns[ 0 ] )
+plt.ylabel( df.columns[ 1 ] )
 plt.title( 'Banks classified by Gaussian Mixture Model' )
-plt.savefig( 'results/bankclassified.png')
+plt.savefig( 'results/bankclassified.png' )
 plt.show()
 
-gm = GaussianMixture(n_components=2, init_params='random' ).fit(X)
+gm = GaussianMixture( n_components=2, init_params='random' ).fit(X)
