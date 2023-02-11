@@ -35,14 +35,14 @@ Ns = np.prod( Nv.T )
 P = 3
 
 r = Om.shape[ 0 ]
-Omi = inv( Om ) #@ np.eye( r )
+Omi = inv( Om )
 B = cholesky( Omi,  ).T
 B @ Om @ B.T
-Bi = inv( B ) #@ np.eye( r )
+Bi = inv( B )
 F = B @ A @ Bi
 
 X = np.eye( r**2 ) - np.kron( F, F )
-Xi = inv( X ) #@ np.eye( r**2 )
+Xi = inv( X ) 
 SigSt = ( Xi @ np.eye( r ).reshape( [ r**2, 1 ] ) ).reshape( [ r, r ]) 
 z1L = -P * np.sqrt( SigSt[ 0, 0 ] )
 z1U = P * np.sqrt( SigSt[ 0, 0 ] )
@@ -55,10 +55,10 @@ z1BG = np.arange( z1L, z1U+dz1, dz1 ).T
 z2BG = np.arange( z2L, z2U+dz2, dz2 ).T
 z1g = ( z1BG[ 1: ] + z1BG[ :-1 ] ) / 2
 z2g = ( z2BG[ 1: ] + z2BG[ :-1 ] ) / 2
-z1BG[ 0 ] = -12
-z1BG[ -1 ] = 12
-z2BG[ 0 ] = -12
-z2BG[ -1] = 12
+z1BG[ 0 ] = -np.inf # lower and upper bnd for the markov chain
+z1BG[ -1 ] = np.inf
+z2BG[ 0 ] = -np.inf
+z2BG[ -1] = np.inf
 
 e1 = np.ones( ( Nv[ 0 ], 1 ) )
 e2 = np.ones( ( Nv[ 1 ], 1 ) )
@@ -110,7 +110,6 @@ plt.figure( 1, figsize=(20, 16))
 ax = plt.axes( projection='3d' )
 ax.plot_surface( x , y, rH.T, cmap='plasma', alpha=0.8 )
 ax.view_init( 20, -40 ) 
-#plt.title('price/dividend as a function of cons and div gr')
 ax.set_xlabel( 'cons g' )
 ax.set_ylabel( 'div g' )
 ax.set_zlabel( 'P/D' )
@@ -131,11 +130,13 @@ for sim_ctr in range( n_sim ):
     res[ sim_ctr, : ] = np.hstack( [ eyg[ sn, : ], Rt, H[ sn ] ] )
     s = sn
 
-plt.figure(2, figsize=(10, 8))
+plt.figure(2, figsize=(15, 12))
 plt.subplot( 4, 1, 1 )
 plt.plot( res[ :, 0 ] )
+plt.title( 'dividend growth' )
 plt.subplot( 4, 1, 2 )
 plt.plot( res[ :, 1 ] )
+plt.title( 'Consumption growth' )
 plt.subplot( 4, 1, 3 )
 plt.plot( res[ :, 2 ] )
 plt.subplot( 4, 1, 4 )
