@@ -157,7 +157,7 @@ x = np.log( res[ :-1, :2 ] ) # previous div and conso
 x = sm.add_constant( x )
 mdl = sm.OLS( y, x ) # check if it corresponds with A and b above
 result = mdl.fit()
-print( result.summary().as_latex() )
+print( result.summary() )
 with open( 'results/regdiv.tex', 'w' ) as file:
     file.write( result.summary().tables[ 1 ].as_latex_tabular() )
 
@@ -167,7 +167,7 @@ y = np.log( res[ 1:, 1 ] )
 T = y.shape[ 0 ] 
 mdl = sm.OLS( y, x )
 result = mdl.fit()
-print( result.summary().as_latex() )
+print( result.summary())
 with open( 'results/regCons.tex', 'w' ) as file:
     file.write( result.summary().tables[ 1 ].as_latex_tabular() )
 
@@ -177,11 +177,11 @@ x = res[ :-1, -1 ]
 x = sm.add_constant( x )
 mdl = sm.OLS( y, x )
 result = mdl.fit()
-print( result.summary().as_latex() )
+print( result.summary() )
 
 with open( 'results/regreturns.tex', 'w' ) as file:
     file.write( result.summary().tables[ 1 ].as_latex_tabular() )
 
-print( 'Skewness : ', skew( res[ :, 2 ] ) ) 
-print( 'Kurtosis : ', kurtosis( res[ :, 2 ] ) + 3 )
+print( 'Skewness : ', skew( res[ :, 2 ]-1 ) ) 
+print( 'Kurtosis : ', kurtosis( res[ :, 2 ]-1 ) + 3 )
 
