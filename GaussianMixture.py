@@ -33,7 +33,7 @@ def vech_loop( A ):
     N = A.shape[ 0 ]
     K = A.shape[ 1 ]
     if N != K:
-        raise NameError( "this function works only for squared matrix" )
+        raise NameError( "The input matrix needs to be a squared matrix" )
     else : 
         to_remove = 0
         to_store = np.array( [] )
@@ -97,6 +97,7 @@ X = df.values
 mu = X.mean( 0 ).reshape( [ -1, 1 ] )
 sigma = np.cov( X.T )
 
+np.random.seed( 4 )
 mu1 = mu + 2 * np.random.uniform( size=[ 2, 1 ] )
 mu2 = mu - 2 * np.random.uniform( size=[ 2, 1 ] )
 sigma1 = sigma.copy()
@@ -157,7 +158,7 @@ print( position )
 
 # print results 
 print( f'mixeur of gaussian Pi : { smallPi1 }' )
-print( f'Mean parameters 1st Gaussian : {mu1}' )
+print( f'Mean parameters 1st Gaussian : { mu1 }' )
 print( f'Mean parameters 2nd Gaussian : { mu2 }' )
 print( f'Covariance parameters 1st Gaussian : { sigma1 }' )
 print( f'Covariance parameters 2nd Gaussian : { sigma2 }' )
@@ -177,7 +178,7 @@ for bank in X:
 plt.xlabel( df.columns[ 0 ] )
 plt.ylabel( df.columns[ 1 ] )
 plt.grid()
-ax.legend( [ a1, a2 ], [ "Type 1", "Type 2" ] )
+ax.legend( [ a1, a2 ], [ "Commercial Bank", "Investment Bank" ] )
 plt.title( 'Banks classified by Gaussian Mixture Model' )
 plt.savefig( 'results/bankclassified.png' )
 plt.show()
