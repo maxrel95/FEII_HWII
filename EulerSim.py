@@ -40,7 +40,7 @@ Omi = inv( Om )
 B = cholesky( Omi,  ).T
 B @ Om @ B.T # check if implementation give identity matrix
 Bi = inv( B )
-F = B @ A @ Bi # F in equation (27) of slides
+F = B @ A @ Bi # F in equation (27) of slides, typo in slide
 
 X = np.eye( r**2 ) - np.kron( F, F )
 Xi = inv( X ) 
@@ -68,7 +68,8 @@ zg = np.hstack( [
     np.kron( e1, z2g.reshape( [ -1, 1] ) )
 ])
 
-imA = inv( np.eye( r ) - A )
+imA = inv( np.eye( r ) - A ) # add mean in second term 
+# get back yt using the correct formula, z_t = C*y_t <=> y_t=C^-1z_t
 yg = zg @ Bi.T + np.kron( b.reshape( [ 1 , -1 ] ) @ imA.T, np.ones( ( Ns, 1 ) ) )
 PiM = np.zeros( ( Ns, Ns ) )
 
@@ -157,6 +158,9 @@ x = sm.add_constant( x )
 mdl = sm.OLS( y, x ) # check if it corresponds with A and b above
 result = mdl.fit()
 print( result.summary().as_latex() )
+with open( 'results/regdiv.tex', 'w' ) as file:
+    file.write( result.summary().tables[ 1 ].as_latex_tabular() )
+
 
 print( 'Dynamic for consumption growht rate' )
 y = np.log( res[ 1:, 1 ] )
@@ -164,6 +168,8 @@ T = y.shape[ 0 ]
 mdl = sm.OLS( y, x )
 result = mdl.fit()
 print( result.summary().as_latex() )
+with open( 'results/regCons.tex', 'w' ) as file:
+    file.write( result.summary().tables[ 1 ].as_latex_tabular() )
 
 y = res[ 1:, 2 ]
 T = y.shape[ 0 ] 
@@ -172,6 +178,9 @@ x = sm.add_constant( x )
 mdl = sm.OLS( y, x )
 result = mdl.fit()
 print( result.summary().as_latex() )
+
+with open( 'results/regreturns.tex', 'w' ) as file:
+    file.write( result.summary().tables[ 1 ].as_latex_tabular() )
 
 print( 'Skewness : ', skew( res[ :, 2 ] ) ) 
 print( 'Kurtosis : ', kurtosis( res[ :, 2 ] ) + 3 )
