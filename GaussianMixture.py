@@ -167,7 +167,7 @@ gm = GaussianMixture( n_components=2, init_params='random' ).fit( X )
 
 bankType = f1 >= f2
 
-fig, ax = plt.subplots()
+fig, ax = plt.subplots( figsize=(12,9))
 position = 0
 for bank in X:
     if bankType[ position ]:
